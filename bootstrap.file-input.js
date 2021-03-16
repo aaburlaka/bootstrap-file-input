@@ -47,7 +47,8 @@ $.fn.bootstrapFileInput = function() {
 
     // Now we're going to wrap that input field with a Bootstrap button.
     // The input will actually still be there, it will just be float above and transparent (done with the CSS).
-    $elem.wrap('<a class="file-input-wrapper btn btn-default ' + className + '"></a>').parent().prepend($('<span></span>').html(buttonWord));
+    $elem.wrap('<a class="file-input-wrapper btn btn-default' + className + '"></a>').parent().prepend($('<span></span>').html(buttonWord));
+    $elem.parent().after('<span class="file-input-name"></span>');
   })
 
   // After we have found all of the file inputs let's apply a listener for tracking the mouse movement.
@@ -81,7 +82,7 @@ $.fn.bootstrapFileInput = function() {
 
       //The positions we are to move the invisible file input
       // The 20 at the end is an arbitrary number of pixels that we can shift the input such that cursor is not pointing at the end of the Browse button but somewhere nearer the middle
-      moveInputX = cursorX - wrapperX - inputWidth + 20;
+      moveInputX = cursorX - wrapperX - (inputWidth/2);
       // Slides the invisible input Browse button to be positioned middle under the cursor
       moveInputY = cursorY- wrapperY - (inputHeight/2);
 
@@ -96,9 +97,9 @@ $.fn.bootstrapFileInput = function() {
 
       var fileName;
       fileName = $(this).val();
+      $(this).val(null);
 
       // Remove any previous file names
-      $(this).parent().next('.file-input-name').remove();
       if (!!$(this).prop('files') && $(this).prop('files').length > 1) {
         var filesLabel = $(this).data('files-label');
         if (!filesLabel) {
@@ -122,7 +123,7 @@ $.fn.bootstrapFileInput = function() {
         $(this).attr('title', fileName);
       } else {
         // Print the fileName aside (right after the the button)
-        $(this).parent().after('<span class="file-input-name">'+fileName+'</span>');
+        $(this).parent().next('.file-input-name').text(fileName);
       }
     });
 
@@ -134,7 +135,7 @@ $.fn.bootstrapFileInput = function() {
 // This ensures they can be easily overridden with developer styles
 var cssHtml = '<style>'+
   '.file-input-wrapper { overflow: hidden; position: relative; cursor: pointer; z-index: 1; }'+
-  '.file-input-wrapper input[type=file], .file-input-wrapper input[type=file]:focus, .file-input-wrapper input[type=file]:hover { position: absolute; top: 0; left: 0; cursor: pointer; opacity: 0; filter: alpha(opacity=0); z-index: 99; outline: 0; }'+
+  '.file-input-wrapper input[type=file], .file-input-wrapper input[type=file]:focus, .file-input-wrapper input[type=file]:hover { position: absolute; top: 0; left: 0; cursor: pointer; opacity: 0; filter: alpha(opacity=0); z-index: 99; outline: 0; width: 200%; height: 70px; }'+
   '.file-input-name { margin-left: 8px; }'+
   '</style>';
 $('link[rel=stylesheet]').eq(0).before(cssHtml);
